@@ -871,7 +871,7 @@
       <!-- 砥鎵小品單點：餐點名稱 / 價位 (使用雙欄卡片優化手機顯示) -->
       <details class="acd" data-key="menu-side-dishes" open>
         <summary class="acd__head">
-          <span class="acd__title">砥鎵小品單點 (非主食/海鮮)</span>
+          <span class="acd__title">砥鎵小品單點</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="acd__body">
@@ -1024,8 +1024,10 @@
   <footer class="site-footer">
     <div class="container footer__inner">
       <div class="social" aria-label="社群連結">
-        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <!-- FB 連結：新增 ID，使用 # 作為佔位符，交由 JS 處理連結 -->
+        <a href="#" id="fb-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <!-- IG 連結：新增 ID，使用 # 作為佔位符，交由 JS 處理連結 -->
+        <a href="#" id="ig-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
       </div>
       <div class="footline">
         <div>地址：106 台北市大安區敦化南路一段 187 巷 59 號 1 樓｜電話：<a href="tel:+886227214588">(02) 2721-4588</a></div>
@@ -1038,8 +1040,11 @@
     // ========== 輔助函數 ==========
     const $ = (s, r = document) => r.querySelector(s);
     const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+    
+    // 判斷是否為行動裝置
+    const isMobile = () => /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    // ========== 行動版導覽列與錨點滾動邏輯 ==========
+    // ========== 行動版導覽列與錨點滾動邏輯 (保持不變) ==========
     const nav = $('.nav');
     const toggle = $('.nav-toggle');
 
@@ -1116,7 +1121,7 @@
     window.addEventListener('hashchange', openHashDetails);
     window.addEventListener('load', openHashDetails);
 
-    // ========== 展開/收合全部功能 ==========
+    // ========== 展開/收合全部功能 (保持不變) ==========
     const tool = $('.toolbar');
     tool?.addEventListener('click', (e) => {
       const t = e.target.closest('[data-action]');
@@ -1132,8 +1137,72 @@
       const open = action === 'expand-all';
       allMenuDetails.forEach(d => d.open = open);
     });
+    
+    // ========== 新增：響應式社群連結處理邏輯 ==========
 
-    // 版權年份
+    function handleSocialClick(e, platform) {
+        e.preventDefault();
+        
+        // 實際連結：已根據使用者提供的網址更新
+        const urls = {
+            facebook: {
+                // FB 網頁連結
+                web: 'https://www.facebook.com/heredijia?locale=zh_TW', 
+                // FB App link (使用網頁連結，手機會自動引導)
+                app: 'fb://page/heredijia' // 使用 fb:// 嘗試開啟 App，若失敗會退回網頁版
+            },
+            instagram: {
+                // IG 網頁連結 (從網址取出 here_dijia 作為用戶名)
+                web: 'https://www.instagram.com/here_dijia/', 
+                // IG App deep link (使用 IG 使用者名稱)
+                app: 'instagram://user?username=here_dijia'
+            }
+        };
+        
+        const { web, app } = urls[platform];
+
+        if (isMobile()) {
+            // 行動裝置：嘗試 Deep Link，若失敗則退回 Web
+            if (platform === 'facebook') {
+                // FB: 嘗試開啟 App，若失敗會直接 fallback 到下一行
+                window.location.href = app;
+                
+                // 失敗回退機制 (主要針對 Android，iOS 較常自動彈出)
+                const timeout = 50; 
+                setTimeout(() => {
+                    // 如果 App 未成功開啟，則導向 Web URL
+                    if (!document.hidden) {
+                        window.location.href = web;
+                    }
+                }, timeout);
+
+            } else if (platform === 'instagram') {
+                // IG: 嘗試開啟 App
+                window.location.href = app;
+                
+                // 失敗回退機制：0.5 秒後，如果 App 沒有開啟 (頁面沒有離開)，則導向 Web URL
+                const timeout = 500; 
+                setTimeout(() => {
+                    // 只有在當前頁面仍停留時才導向 web
+                    if (!document.hidden) {
+                        window.location.href = web;
+                    }
+                }, timeout);
+            }
+        } else {
+            // 電腦/PC：另開新分頁
+            window.open(web, '_blank');
+        }
+    }
+
+    // 綁定點擊事件
+    const fbLink = document.getElementById('fb-link');
+    const igLink = document.getElementById('ig-link');
+
+    fbLink?.addEventListener('click', (e) => handleSocialClick(e, 'facebook'));
+    igLink?.addEventListener('click', (e) => handleSocialClick(e, 'instagram'));
+    
+    // ========== 尾部版權年份 (保持不變) ==========
     $('#y').textContent = new Date().getFullYear();
   </script>
 </body>
