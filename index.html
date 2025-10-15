@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>砥鎵鍋物｜HERE SHABU SHABU</title>
+  <meta name="description" content="砥鎵火鍋｜店舖資訊、最新餐點、線上訂位、人才招募。RWD 自適應設計。" />
+  <style>
+    /* ========== 顏色切換：黑底 + 金白字（只改色、不改版面與內容） ========== */
+    :root{
+      --max-w: 1100px;
+      --gap: 20px;
+      --brand: rgb(140, 122, 60); /* 金色：已修改為 R140 G122 B60 */
+      --ink: #f5f5f5;   /* 主要白字 */
+      --muted: #cfcfcf; /* 次要白字 */
+      --bg: #0b0b0b;    /* 黑底 */
+      --paper: #111111; /* 深灰卡片底 */
+      --line: #2a2a2a;  /* 深色邊線 */
+      --radius: 14px;
+    }
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans TC", "PingFang TC", sans-serif;
+      line-height: 1.65;
+      color: var(--ink);
+      background: var(--bg);
+      /* 【新增】黑色背景上的裝飾線條圖案 */
+      background-image: url('image_6635cf.png'); 
+      background-repeat: no-repeat;
+      background-size: cover; /* 確保背景圖覆蓋整個視窗 */
+      background-position: center center;
+      background-attachment: fixed; /* 讓背景圖固定，不隨內容捲動 */
+      /* 輕微降低透明度，讓主內容更突出 */
+      opacity: 0.9; 
+      /* 確保所有裝置都有這個頂部間距，防止內容被 fixed header 遮蓋 */
+      padding-top: 64px; 
+    }
+    img{ max-width: 100%; display:block; }
+    a{ color: var(--brand); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+    .container{ max-width: var(--max-w); margin: 0 auto; padding: 0 16px; }
+
+    /* ========== 頂部導覽（深色） ========== */
+    .site-header{ 
+      position: fixed; 
+      top: 0; 
+      left: 0;
+      right: 0;
+      z-index: 999; 
+      background: rgba(0,0,0,.9); 
+      backdrop-filter: blur(6px); 
+      border-bottom: 1px solid var(--line); 
+    }
+    .nav-bar{ display:flex; align-items:center; justify-content: space-between; height: 64px; }
+    .brand{ display:flex; align-items:center; gap: 10px; font-weight: 700; color: var(--brand); }
+    .brand__logo{ display: none !important; }
+    .brand__name{ font-size: 18px; }
+    .nav{ display:flex; gap: 16px; align-items:center; }
+    .nav a{ color: var(--ink); padding: 6px 10px; border-radius: 8px; transition: color .15s ease; }
+    .nav a.active, .nav a:hover{ color: var(--brand); background: transparent; text-decoration: none; }
+    .nav-toggle{ display:none; }
+
+    @media (max-width: 840px){
+      .nav{ display:none; position:absolute; top:64px; right:0; left:0; background:#0f0f0f; border-bottom:1px solid var(--line); padding:8px 16px; flex-direction: column; align-items: stretch; }
+      .nav.show{ display:flex; }
+      .nav a{ padding:10px; border-radius:10px; text-align: center; }
+      .nav-toggle{ display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border:1px solid var(--line); border-radius:10px; background:#0f0f0f; color: var(--brand); }
+    }
+
+    @media (min-width: 841px){
+      .nav-toggle{ display: none !important; }
+    }
+
+    /* ========== 首頁 Hero（全屏背景圖 + 置中內容） ========== */
+    .hero-full {
+        min-height: 100vh; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        /* 背景圖設定：注意圖片路徑需要存在 */
+        background-image: url('back01test.png'); 
+        background-size: cover; 
+        background-position: center top; 
+        background-attachment: fixed; 
+        padding-top: 64px; 
+    }
+    .hero-full::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        /* 增加黑色半透明遮罩，確保白色文字清晰可見 */
+        background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.8) 100%); 
+        z-index: 1;
+    }
+    .hero-content {
+        position: relative;
+        z-index: 2; 
+        padding: 20px;
+        color: var(--ink); 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%; 
+        max-width: 90%; 
+        margin: 0 auto; 
+    }
+    .hero-logo {
+        width: clamp(200px, 50vw, 400px); 
+        height: auto;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)); 
+    }
+    .hero-text { 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+    }
+    .hero-text h1{ margin:0 0 8px; font-size: clamp(28px, 4vw, 56px); color: var(--ink); font-weight: 700; }
+    .hero-text p{ margin:0 0 30px; font-size: clamp(16px, 2vw, 24px); color: var(--muted); }
+    .hero-btns { display:flex; gap: 16px; flex-wrap:wrap; justify-content: center; }
+    
+    .btn{ display:inline-block; padding: 12px 24px; border: 1px solid var(--brand); text-decoration: none; border-radius: 10px; color: var(--brand); background: transparent; transition: background 0.2s ease, color 0.2s ease; }
+    .btn--primary { background: var(--brand); color: #111; border-color: var(--brand); font-weight: 600; }
+    .btn--primary:hover { background: rgb(160, 142, 80); border-color: rgb(160, 142, 80); } 
+    .btn--light{ background: transparent; color: var(--ink); border-color: var(--ink); font-weight: 600; }
+    .btn--light:hover{ background: rgba(255, 255, 255, 0.1); color: var(--ink); }
+
+    /* ========== Section & Accordion（深色卡片） ========== */
+    section.section{ scroll-margin-top: 84px; padding:64px 0; }
+    .section__head{ display:flex; align-items:center; justify-content:space-between; gap: 10px; margin-bottom: 10px; }
+    .section__title{ font-size: 24px; margin: 0; color: var(--brand); } 
+    .section__desc{ color: var(--muted); margin:0; font-size: 14px; }
+
+    details.acd{ border:1px solid var(--line); border-radius: var(--radius); background: var(--paper); overflow:hidden; color: var(--ink); }
+    details.acd + details.acd{ margin-top: 12px; }
+    details.acd[open] .acd__body{ animation: slide .25s ease; }
+    @keyframes slide{ from{ opacity:0; transform: translateY(-4px);} to{ opacity:1; transform: translateY(0);} }
+    summary.acd__head{ list-style:none; cursor:pointer; padding: 14px 16px; display:flex; align-items:center; justify-content:space-between; gap: 12px; background: #0f0f0f; color: var(--ink); }
+    summary.acd__head::-webkit-details-marker{ display:none; }
+    .acd__title{ font-weight: 700; }
+    .acd__body{ padding: 8px 16px 16px; background: var(--paper); border-top:1px solid var(--line); }
+    .acd__head svg { transition: transform 0.2s ease; }
+    details.acd[open] .acd__head svg { transform: rotate(180deg); }
+
+    /* ========== 關於砥鎵：PC 左圖右文，手機上下 ========== */
+    .about__grid{ display:grid; grid-template-columns: 1.1fr 1.4fr; gap: var(--gap); align-items:center; }
+    .media{ border:1px solid var(--line); border-radius: var(--radius); overflow:hidden; background:#0f0f0f; }
+    .media--tall{ aspect-ratio: 16/9; } 
+    .prose p{ margin: 0 0 12px; }
+    @media (max-width: 840px){ .about__grid{ grid-template-columns:1fr; } }
+    .media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; 
+      object-position: center center; 
+      display: block;
+    }
+
+
+    /* ========== 店舖資訊 ========== */
+    .info{ display:grid; grid-template-columns: 1.2fr 1fr; gap: var(--gap); }
+    @media (max-width: 840px){ .info{ grid-template-columns:1fr; } }
+    .info__card{ border:1px solid var(--line); background: #0f0f0f; border-radius: var(--radius); padding: 16px; color: var(--ink); }
+    .kv{ margin:0; color: var(--muted); }
+    .btn-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px; }
+
+    /* 確保嵌入的 Google 地圖是響應式的 */
+    .map-container {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        /* 16:9 比例 */
+        padding-top: 56.25%; 
+        border-radius: var(--radius);
+    }
+    .map-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    /* ========== 新鮮餐點 ========== */
+    .menu-grid{ display:grid; grid-template-columns: 1fr; gap: var(--gap); }
+    @media (min-width: 841px) { 
+      .menu-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+    }
+    .menu-card{ border:1px solid var(--line); background:#0f0f0f; border-radius: var(--radius); padding: 16px; color: var(--ink); }
+    .menu-card h3{ margin: 0 0 6px; }
+    .note{ color: var(--muted); font-size: 13px; margin: 0 0 10px; }
+
+    /* 菜單清單（擇一） */
+    .list{ display:grid; gap: 8px; }
+    .list__item{ display:flex; align-items:flex-start; gap: 8px; }
+    .dot{ width:6px; height:6px; border-radius:999px; background: var(--brand); margin-top: 10px; flex:none; }
+    .list__body{ width: 100%; }
+    .list__body small{ color: var(--muted); }
+
+    /* 表格：主食、海鮮、蔬菜單品（深色） */
+    .table{ width:100%; border-collapse: collapse; color: var(--ink); }
+    .table th, .table td{ border-bottom:1px solid var(--line); padding: 10px 8px; text-align:left; vertical-align: top; }
+    .table th{ background:#141414; font-weight: 700; color: var(--ink); }
+    .table tfoot td{ border-top:1px solid var(--line); font-size: 13px; color: var(--muted); }
+
+    /* Footer */
+    .site-footer{ border-top:1px solid var(--line); background:#000; color:#bbbbbb; }
+    .footer__inner{ display:flex; flex-direction: column; justify-content:space-between; align-items:center; gap: 10px; padding: 16px 0; }
+    @media (min-width: 600px) {
+        .footer__inner{ flex-direction: row; }
+    }
+    .social{ display:flex; gap: 10px; align-items:center; }
+    .social a{ display:inline-flex; width:32px; height:32px; border:1px solid var(--line); border-radius:10px; align-items:center; justify-content:center; background:#0f0f0f; color: var(--brand); }
+    .footline{ color: #bbbbbb; font-size: 14px; text-align: center; }
+
+    /* 工具列（展開/收合全部） */
+    .toolbar{ display:flex; gap:10px; flex-wrap:wrap; margin: 8px 0 16px; padding: 0 16px; }
+    .chip{ display:inline-block; padding:8px 10px; border:1px solid var(--line); border-radius: 999px; background:#0f0f0f; color: var(--ink); cursor:pointer; user-select: none; transition: background 0.15s ease; }
+    .chip:hover { background: #141414; }
+    
+    /* 海鮮套餐客製化樣式 */
+    .seafood-set h4 {
+        margin: 0 0 4px;
+        font-size: 16px;
+        color: var(--brand);
+        font-weight: 700;
+    }
+    .seafood-set p {
+        margin: 0 0 10px;
+        font-size: 14px;
+        color: var(--muted);
+    }
+    .seafood-set .price {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--ink);
+    }
+    
+    /* 砥鎵小品單點客製化樣式 */
+    .side-menu-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      /* 統一單點區塊的樣式 */
+      padding: 16px;
+      background: var(--paper);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+    }
+    .acd__body .side-menu-grid {
+        padding: 0; /* 讓內容充滿 acd__body */
+        background: transparent;
+        border: none;
+    }
+
+    @media (min-width: 600px) {
+      .side-menu-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .side-menu-card {
+      border:1px solid var(--line); 
+      background:#0f0f0f; 
+      border-radius: var(--radius); 
+      padding: 16px; 
+      color: var(--ink);
+    }
+
+    .side-menu-card h4 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: var(--ink);
+      font-weight: 700;
+      background: var(--line); 
+      padding: 8px 16px;
+      margin: -16px -16px 8px; 
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
+    }
+    .side-menu-card .list__item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+    }
+    .side-menu-card .list__body {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .side-menu-card .price-tag {
+      font-weight: 400; 
+      color: var(--ink); 
+      flex-shrink: 0;
+      padding-left: 10px;
+    }
+    
+    /* 新增的圖片展示區塊樣式 */
+    .image-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 12px;
+        margin-top: 24px;
+    }
+    
+    .image-gallery figure {
+        margin: 0;
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: #141414;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .image-gallery img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.3s ease-in-out;
+        object-fit: cover; 
+        object-position: center center; 
+    }
+    .image-gallery img:hover {
+        transform: scale(1.05);
+    }
+
+    /* 針對 PC 版優化圖片高度，設定為 330px */
+    @media (min-width: 841px) { 
+        .image-gallery figure {
+            height: 330px; 
+            min-height: 330px; 
+        }
+        .image-gallery img {
+            object-fit: cover; 
+            height: 100%;
+            width: 100%;
+            object-position: center center; 
+        }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMDJdZ6u86mYwJdnV2sI/OOXw/3s2tJ8Xj3v5f92zR75/v13w1/pA+Y9hB806u/zQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <!-- ========== Header 導覽 ========== -->
+  <header class="site-header">
+    <div class="container nav-bar">
+      <div class="brand">
+        <!-- 簡化 Logo 呈現 -->
+        <!-- <img class="brand__logo" src="assets/img/logo.png" alt="砥鎵火鍋 Logo" /> -->
+        <span class="brand__name">砥鎵火鍋</span>
+      </div>
+      <nav class="nav" aria-label="主導覽">
+        <a href="#home" class="active">首頁</a>
+        <a href="#about">關於砥鎵</a>
+        <a href="#stores">店舖資訊</a>
+        <a href="#menu">新鮮餐點</a>
+        <a href="#notice">用餐須知</a>
+        <a href="#reserve">訂位</a>
+        <a href="#career">人才招募</a>
+      </nav>
+      <!-- 使用 Fa Icon 提升美觀 -->
+      <button class="nav-toggle" aria-label="開啟選單" type="button">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== 首頁（全屏背景圖 + 置中內容） ========== -->
+  <section id="home" class="hero-full section">
+    <div class="hero-content">
+        <!-- 圖片路徑需確保正確，否則將會找不到圖片 -->
+        <img class="hero-logo" src="logo02.png" alt="砥鎵火鍋 Logo 大圖" onerror="this.onerror=null;this.src='https://placehold.co/400x150/0b0b0b/8C7A3C?text=DI+JIA+SHABU'" />
+        <div class="hero-text">
+            <h1>品味，屬於你的鍋物哲學</h1>
+            <p>嚴選好料、職人湯頭。歡迎訂位蒞臨，品嚐四季時令的鮮甜。</p>
+            <div class="hero-btns">
+                <a class="btn btn--primary" href="#menu">查看新鮮餐點</a>
+                <a class="btn btn--light" href="#reserve">立即訂位</a>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <!-- ========== 關於砥鎵 ========== -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">關於砥鎵</h2>
+      </div>
+
+      <details class="acd" data-key="about" open>
+        <summary class="acd__head">
+          <span class="acd__title">品牌故事</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="about__grid">
+            <figure class="media media--tall">
+              <img src="home01.jpg" alt="砥鎵火鍋環境或食材照片" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1C1C1C/DDDDDD?text=品牌故事圖片'" />
+            </figure>
+            <div class="prose">
+              <p>砥鎵堅持選用在地新鮮食材與良心湯頭，透過職人火候，將每一樣食材的甘甜層層引出。從開胃到收尾，都是細節。</p>
+              <p>我們相信，好的火鍋，來自於對四季的尊重與對土地的感謝。歡迎您，與家人朋友在此聚餐。</p>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== 店舖資訊 ========== -->
+  <section id="stores" class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">店舖資訊</h2>
+      </div>
+
+      <details class="acd" data-key="stores" open>
+        <summary class="acd__head">
+          <span class="acd__title">大安本店</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="info">
+            <div class="info__card">
+              <p class="kv"><strong>預約訂位：</strong><a href="tel:+886227214588">(02) 2721-4588</a></p>
+              <p class="kv"><strong>門市地址：</strong>106 台北市大安區敦化南路一段 187 巷 59 號 1 樓</p>
+              <p class="kv"><strong>營業時間：</strong></p>
+              <!-- 修正：讓營業時間呈現更清晰 -->
+              <p class="kv">週二到周日：12:00–22:30</p>
+              <p class="kv">周五到周六：12:00–23:00</p>
+              <div class="btn-row">
+                <a class="btn" href="https://maps.app.goo.gl/68hsy76HgUQ5syyM8" target="_blank" rel="noopener">Google 地圖 <i class="fas fa-external-link-alt" style="font-size:10px; margin-left: 4px;"></i></a>
+                <a class="btn btn--primary" href="https://inline.app/booking/-OBiRumjzwAm5htR3ZKn:inline-live-3/-OBiRvCHanXMcq1k0pLD" target="_blank" rel="noopener">線上訂位 <i class="fas fa-calendar-check" style="font-size:12px; margin-left: 4px;"></i></a>
+              </div>
+            </div>
+            <div class="info__card">
+              <!-- 崁入 Google 地圖 (16:9 比例) -->
+              <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.745172522222!2d121.5497859088308!3d25.042720637851755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab004d413785%3A0xc2fc60ba623b5c16!2zSGVyZSDnoKXpjrUg5p2x5Y2A6Y2L54mpIHwg54Gr6Y2LIHwg6bq76L6j54Gr6Y2L!5e0!3m2!1szh-TW!2stw!4v1760412785768!5m2!1szh-TW!2stw" 
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" 
+                        aria-label="砥鎵火鍋 Google地圖"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== 新鮮餐點 ========== -->
+  <section id="menu" class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">新鮮餐點</h2>
+      </div>
+
+      <!-- 工具列（展開/收合全部） - 新增於菜單區塊頂部 -->
+      <div class="toolbar" aria-label="工具列">
+          <div class="chip" data-action="expand-all">
+              <i class="fas fa-expand-arrows-alt" style="margin-right: 4px;"></i> 展開全部菜單
+          </div>
+          <div class="chip" data-action="collapse-all">
+              <i class="fas fa-compress-arrows-alt" style="margin-right: 4px;"></i> 收合全部菜單
+          </div>
+      </div>
+
+
+      <!-- 套餐：開胃菜 / 前餐 / 湯頭 / 附餐 / 甜點 -->
+      <details class="acd" data-key="menu-sets" open>
+        <summary class="acd__head">
+          <span class="acd__title">套餐選擇</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="menu-grid">
+            <div class="menu-card">
+                <h3>開胃菜 <small>（擇一）</small></h3>
+              <div class="list">
+                <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>洋蔥芥末章魚</div></div></div>
+                <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>松露海藻干貝</div></div></div>
+                <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>活火乳酪烏魚子<small>＋199 元</small></div></div></div>
+              </div>
+            </div>
+            
+            <div class="menu-card">
+              <h3>前餐 <small>（擇一）</small></h3>
+              <div class="list">
+                <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>義式蔬菜左巴薩米克醋</div></div></div>
+                <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>砥鎵鮪魚白醬</div></div></div>
+                <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>剝皮生牛肉<small>＋199 元</small></div></div></div>
+              </div>
+            </div>
+
+            <div class="menu-card">
+                <h3>砥鎵熬煮湯頭 <small>（擇一）</small></h3>
+                <div class="list">
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>日式昆布湯</div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>砥鎵麻辣湯<small>＋99 元</small></div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>黃金蟲草燕麥奶<small>＋99 元</small></div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>重慶酸菜湯<small>＋99 元</small></div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>瑪莎曼咖哩湯<small>＋99 元</small></div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>剝皮辣椒湯<small>＋88元</small></div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>當歸藥膳湯<small>＋88元</small></div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>菇菇素食湯<small>＋88元</small></div></div></div>
+                </div>
+              </div>
+              
+            <div class="menu-card"><h3>菜盤 </h3><div class="list"><div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>當季時蔬</div></div></div></div></div>
+            <div class="menu-card"><h3>主食 </h3><div class="list"><div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>請至主食區挑選</div></div></div></div></div>
+            
+            <div class="menu-card">
+                <h3>附餐 <small>（擇一）</small></h3>
+                <div class="list">
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>讚岐烏龍麵</div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>台梗九號米</div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>嚴選雞蛋</div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>寬Q冬粉</div></div></div>
+                </div>
+              </div>
+
+            <div class="menu-card">
+              <h3>甜點 <small>（單點價）</small></h3>
+                <div class="list">
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>手工焦糖布丁 </div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>火火費南雪 (抹茶.伯爵茶.太妃糖) </div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>砥鎵牛奶霜淇淋 </div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>松露霜淇淋 <small>（+$199 升級）</small></div></div></div>
+                  <div class="list__item"><span class="dot" aria-hidden></span><div class="list__body"><div>POP MART 霜淇淋 <small>（+$199 升級）</small></div></div></div>
+                </div>
+            </div>
+          </div>
+          <!-- 圖片畫廊 -->
+          <div class="image-gallery">
+            <figure>
+              <img src="menu02.jpeg" alt="火鍋全景照片" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1C1C1C/DDDDDD?text=套餐主視覺示意圖'"/>
+            </figure>
+          </div>
+        </div>
+      </details>
+
+      <!-- 主食：餐點名稱 / 套餐 / 單點 -->
+      <details class="acd" data-key="menu-staples" open>
+        <summary class="acd__head">
+          <span class="acd__title">主食 (肉品)</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="menu-card">
+            <table class="table" role="table" aria-label="主食清單">
+              <thead>
+                <tr>
+                  <th style="width:46%">餐點名稱</th>
+                  <th style="width:27%">套餐價</th>
+                  <th style="width:27%">單點價</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>日本A5黑毛和牛紐約客</td><td>2288</td><td>1888</td></tr>
+                <tr><td>美國PRIME頂級牛小排</td><td>1888</td><td>1488</td></tr>
+                <tr><td>澳洲M9和牛板腱</td><td>1688</td><td>1288</td></tr>
+                <tr><td>小何賽伊比利黑毛豬</td><td>1488</td><td>1088</td></tr>
+                <tr><td>日本國產F1和牛腿三角</td><td>1288</td><td>888</td></tr>
+                <tr><td>紐西蘭牛舌芯</td><td>1088</td><td>688</td></tr>
+                <tr><td>台灣本土愛爾林杜洛豬</td><td>999</td><td>588</td></tr>
+                <tr><td>盤克夏黑豚豬五花</td><td>999</td><td>588</td></tr>
+                <tr><td>安格斯黑牛肩胛</td><td>999</td><td>588</td></tr>
+                <tr><td>紐澳綿羊肩卷</td><td>799</td><td>388</td></tr>
+                <tr><td>祇緣頂級牛五花</td><td>699</td><td>388</td></tr>
+                <tr><td>祇緣精選豬梅花</td><td>699</td><td>388</td></tr>
+                <tr><td>田園野菇鮮蔬食</td><td>699</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- 圖片畫廊 -->
+          <div class="image-gallery">
+            <figure>
+              <img src="meat01.jpg" alt="肉品擺盤特寫" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1C1C1C/DDDDDD?text=主食特寫示意圖'" />
+            </figure>
+          </div>
+        </div>
+      </details>
+
+      <!-- 海鮮套餐與單點 -->
+      <details class="acd" data-key="menu-seafood-full" open>
+        <summary class="acd__head">
+          <span class="acd__title">海鮮</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="menu-grid" style="grid-template-columns: 1fr;">
+            <!-- 海鮮套餐列表 -->
+            <div class="menu-card">
+              <h3>海鮮套餐</h3>
+              <div class="list seafood-set">
+                <div class="list__item">
+                  <span class="dot" aria-hidden></span>
+                  <div class="list__body">
+                    <h4>饗蟹鮮潮宴<small>(含雜炊服務)</small></h4>
+                    <div class="price">TWD 1588</div>
+                    <p>當季蟹品 1 隻 / 管魷目(魷魚) 1 尾 / 日本生食級干貝 3 顆</p>
+                  </div>
+                </div>
+                
+                <div class="list__item">
+                  <span class="dot" aria-hidden></span>
+                  <div class="list__body">
+                    <h4>蝦爆軍團</h4>
+                    <div class="price">TWD 1388</div>
+                    <p>本土錦繡龍蝦 1 隻 / 斑節對蝦 3 尾 / 天鑽白蝦 3 尾 / 天使紅蝦 3 尾</p>
+                  </div>
+                </div>
+
+                <div class="list__item">
+                  <span class="dot" aria-hidden></span>
+                  <div class="list__body">
+                    <h4>皇生貴子</h4>
+                    <div class="price">TWD 520</div>
+                    <p>東石鮮蚵仔 200 克 / 台南七股直送蛤蜊 15 顆 / 日本空運生蠔 2 顆</p>
+                  </div>
+                </div>
+
+                <div class="list__item">
+                  <span class="dot" aria-hidden></span>
+                  <div class="list__body">
+                    <h4>砥鎵海鮮任選三拼</h4>
+                    <div class="price">TWD 499</div>
+                    <p>台南七股直送蛤蜊 15 顆 / 日本生食級干貝 3 顆 / 斑節對蝦 3 尾 / 天鑽白蝦 3 尾 / 天使紅蝦 3 尾 / 金目鱸魚菲力 1 片</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 海鮮單點表格 -->
+            <div class="menu-card">
+              <h3>海鮮單點</h3>
+              <table class="table" role="table" aria-label="海鮮單點清單">
+                <thead>
+                  <tr>
+                    <th style="width:40%">餐點名稱</th>
+                    <th style="width:30%">份量/規格</th>
+                    <th style="width:30%">價位</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>當季蟹品</td><td>1 隻</td><td>1299 (含贈飲服務)</td></tr>
+                  <tr><td>龍虎石斑魚</td><td>半片</td><td>399</td></tr>
+                  <tr><td>本土錦繡龍蝦</td><td>1 隻</td><td>999</td></tr>
+                  <tr><td>東石鮮蚵仔</td><td>200 克</td><td>299</td></tr>
+                  <tr><td>天鑽白蝦</td><td>3 尾</td><td>199</td></tr>
+                  <tr><td>天使紅蝦</td><td>3 尾</td><td>199</td></tr>
+                  <tr><td>管魷目 (魷魚)</td><td>1 尾</td><td>199</td></tr>
+                  <tr><td>日本生食級干貝</td><td>3 顆</td><td>199</td></tr>
+                  <tr><td>日本空運生蠔</td><td>2 顆</td><td>199</td></tr>
+                  <tr><td>金目鱸魚菲力</td><td>1 片</td><td>199</td></tr>
+                  <tr><td>台南七股直送蛤蜊</td><td>15 顆</td><td>169</td></tr>
+                  <tr><td>斑節對蝦</td><td>3 尾</td><td>199</td></tr>
+                  <tr><td>半片龍虎石斑魚</td><td>半片</td><td>399</td></tr>
+                  <tr><td>1 隻當季蟹品</td><td>1 隻</td><td>599</td></tr>
+                  <tr><td>15 顆台南七股直送蛤蜊</td><td>15 顆</td><td>299</td></tr>
+                  <tr><td>30 顆台南七股直送蛤蜊</td><td>30 顆</td><td>299</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- 圖片畫廊 -->
+          <div class="image-gallery">
+            <figure>
+              <img src="seafood01.png" alt="海鮮拼盤或單點" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1C1C1C/DDDDDD?text=海鮮特寫示意圖'" />
+            </figure>
+          </div>
+        </div>
+      </details>
+      
+      <!-- 蔬菜單品：自由列出 -->
+      <details class="acd" data-key="menu-veggies" open>
+        <summary class="acd__head">
+          <span class="acd__title">蔬菜單品</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="menu-card">
+            <table class="table" role="table" aria-label="蔬菜單品">
+              <thead>
+                <tr>
+                  <th style="width:60%">品項</th>
+                  <th style="width:40%">價位</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>鴨血 (6塊)</td><td>99</td></tr>
+                <tr><td>板豆腐 (6塊)</td><td>99</td></tr>
+                <tr><td>白蘿蔔 (6片)</td><td>99</td></tr>
+                <tr><td>玉米筍 (6根)</td><td>99</td></tr>
+                <tr><td>絲瓜 (6片)</td><td>99</td></tr>
+                <tr><td>牛番茄 (6片)</td><td>99</td></tr>
+                <tr><td>香菇 (6片)</td><td>99</td></tr>
+                <tr><td>綠櫛瓜 (6片)</td><td>99</td></tr>
+                <tr><td>菠菜</td><td>99</td></tr>
+                <tr><td>茼蒿</td><td>99 <small>（季節限定）</small></td></tr>
+                <tr><td>青江菜</td><td>99</td></tr>
+                <tr><td>高麗菜</td><td>99</td></tr>
+                <tr><td>包肉生菜</td><td>99</td></tr>
+                <tr><td>鴻喜菇</td><td>99</td></tr>
+                <tr><td>雪白菇</td><td>99</td></tr>
+                <tr><td>金滑菇</td><td>99</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- 圖片畫廊 -->
+          <div class="image-gallery">
+            <figure>
+              <!-- 菜品的圖片檔位址已改成 veggie.jpg -->
+              <img src="veggie.jpg" alt="綜合蔬菜與火鍋料單品特寫" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1C1C1C/DDDDDD?text=蔬菜特寫示意圖'"/>
+            </figure>
+          </div>
+        </div>
+      </details>
+
+      <!-- 火鍋料單品：餐點名稱 / 價位（欄位可彈性變長） -->
+      <details class="acd" data-key="menu-balls-1" open>
+        <summary class="acd__head">
+          <span class="acd__title">火鍋料單品</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="menu-card">
+            <table class="table" role="table" aria-label="火鍋料清單">
+              <thead>
+                <tr>
+                  <th style="width:60%">餐點名稱</th>
+                  <th style="width:40%">價位</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>鮮蝦漿</td><td>159</td></tr>
+                <tr><td>花枝漿</td><td>159</td></tr>
+                <tr><td>炸豆卷 (9條)</td><td>99</td></tr>
+                <tr><td>老油條 (9條)</td><td>99</td></tr>
+                <tr><td>蟹味棒 (9條)</td><td>99</td></tr>
+                <tr><td>蒟蒻絲 (9條)</td><td>99</td></tr>
+                <tr><td>黃金蛋餃 (9片)</td><td>99</td></tr>
+                <tr><td>龍蝦沙拉丸 (6顆)</td><td>99</td></tr>
+                <tr><td>桂丁雞肉丸 (6顆)</td><td>99</td></tr>
+                <tr><td>黃金魚蛋 (6顆)</td><td>99</td></tr>
+                <tr><td>排骨酥 (6塊)</td><td>99</td></tr>
+                <tr><td>魚包蛋 (6顆)</td><td>99</td></tr>
+                <tr><td>起司球 (6顆)</td><td>99</td></tr>
+                <tr><td>凍豆腐 (6塊)</td><td>99</td></tr>
+              </tbody>
+              <tfoot>
+                <tr><td colspan="2">除鮮蝦漿及花枝漿以外，任選三樣 $199，任選五樣 $299</td></tr>
+              </tfoot>
+            </table>
+          </div>
+          <!-- 圖片畫廊 -->
+          <div class="image-gallery">
+            <figure>
+              <!-- 火鍋料單品的圖片檔位址已改成 fishcake.jpg -->
+              <img src="fishcake.jpg" alt="火鍋料特寫照片" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1C1C1C/DDDDDD?text=火鍋料特寫示意圖'"/>
+            </figure>
+          </div>
+        </div>
+      </details>
+
+      <!-- 砥鎵特調飲品：餐點名稱 / 價位 -->
+      <details class="acd" data-key="menu-drinks" open>
+        <summary class="acd__head">
+          <span class="acd__title">砥鎵特調飲品</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="menu-card">
+            <table class="table" role="role" aria-label="砥鎵特調飲品">
+              <thead>
+                <tr>
+                  <th style="width:60%">飲品</th>
+                  <th style="width:40%">價位</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>櫻妳莓好</td><td>158</td></tr>
+                <tr><td>雲層下的秘密</td><td>158</td></tr>
+                <tr><td>當日水果冰沙</td><td>158</td></tr>
+                <tr><td>祇緣珍珠鮮奶茶</td><td>148</td></tr>
+                <tr><td>愛爾荷你</td><td>148</td></tr>
+                <tr><td>焦糖拿鐵</td><td>148</td></tr>
+                <tr><td>香草拿鐵</td><td>148</td></tr>
+                <tr><td>榛果拿鐵</td><td>148</td></tr>
+                <tr><td>桂花烏龍凍飲</td><td>138</td></tr>
+                <tr><td>琥珀蜜柚</td><td>138</td></tr>
+                <tr><td>日落橙</td><td>138</td></tr>
+                <tr><td>濃醇拿鐵</td><td>128</td></tr>
+                <tr><td>經典美式</td><td>108</td></tr>
+                <tr><td>柳橙汁</td><td>99</td></tr>
+                <tr><td>可口可樂</td><td>99</td></tr>
+                <tr><td>沁檸泡泡</td><td>99</td></tr>
+                <tr><td>茉韻烏龍</td><td>99</td></tr>
+                <tr><td>台灣紅茶</td><td>99</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- 圖片畫廊 -->
+          <div class="image-gallery">
+            <figure>
+              <!-- 特調飲品的圖片檔位址已改成 drink.jpg -->
+              <img src="drink.jpg" alt="特調飲品集合照片" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1C1C1C/DDDDDD?text=飲品特寫示意圖'"/>
+            </figure>
+          </div>
+        </div>
+      </details>
+
+
+      <!-- 砥鎵精選酒品：餐點名稱 / 價位（欄位可彈性變長） -->
+      <details class="acd" data-key="menu-alcohols" open>
+        <summary class="acd__head">
+          <span class="acd__title">砥鎵精選酒品</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="menu-card">
+            <table class="table" role="role" aria-label="酒品清單">
+              <thead>
+                <tr>
+                  <th style="width:60%">酒單</th>
+                  <th style="width:40%">價位</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>KIRIN 麒麟生啤酒</td><td>158/杯</td></tr>
+                <tr><td>山崎梅酒</td><td>1088/瓶&ensp;488/杯</td></tr>
+                <tr><td>梅乃宿柚子</td><td>1288/瓶&ensp;588/杯</td></tr>
+                <tr><td>獺祭三割丸</td><td>2588/瓶&ensp;988/壺</td></tr>
+                <tr><td>Cloudy Bay 白蘇維翁白酒</td><td>1988/瓶</td></tr>
+                <tr><td>Bonrock Station 夏多內白酒</td><td>1088/瓶&ensp;588/杯</td></tr>
+                <tr><td>Robert Mondavi 卡本內蘇維翁紅酒</td><td>2488/瓶</td></tr>
+                <tr><td>JCB 勃根地紅酒</td><td>1088/瓶&ensp;588/杯</td></tr>
+                <tr><td>加拿大冰酒</td><td>1888/瓶</td></tr>
+                <tr><td>蘇格登12年雪莉桶</td><td>1988/瓶&ensp;488/杯</td></tr>
+                <tr><td>慕赫12年</td><td>1988/瓶&ensp;488/杯</td></tr>
+                <tr><td>大摩12年</td><td>2288/瓶&ensp;588/杯</td></tr>
+                <tr><td>百富12年</td><td>2288/瓶&ensp;588/杯</td></tr>
+                <tr><td>約翰走路XR 21年</td><td>3688/瓶</td></tr>
+                <tr><td>皇家禮炮21年藍瓶</td><td>3988/瓶</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- 圖片畫廊 -->
+          <div class="image-gallery">
+            <figure>
+              <!-- 砥鎵精選酒品的圖片檔位址已改成 wine.jpg -->
+              <img src="wine.jpg" alt="酒品特寫照片" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1C1C1C/DDDDDD?text=酒品特寫示意圖'"/>
+            </figure>
+          </div>
+        </div>
+      </details>
+
+      <!-- 砥鎵小品單點：餐點名稱 / 價位 (使用雙欄卡片優化手機顯示) -->
+      <details class="acd" data-key="menu-side-dishes" open>
+        <summary class="acd__head">
+          <span class="acd__title">砥鎵小品單點 (非主食/海鮮)</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="side-menu-grid"> 
+            
+            <div class="menu-card side-menu-card">
+              <h4>開胃菜</h4>
+              <div class="list">
+                <div class="list__item"><div class="list__body"><div>洋蔥芥末章魚</div><span class="price-tag">128</span></div></div>
+                <div class="list__item"><div class="list__body"><div>松露海藻干貝</div><span class="price-tag">128</span></div></div>
+                <div class="list__item"><div class="list__body"><div>火火乳酪烏魚子</div><span class="price-tag">358</span></div></div>
+              </div>
+            </div>
+
+            <div class="menu-card side-menu-card">
+              <h4>前餐</h4>
+              <div class="list">
+                <div class="list__item"><div class="list__body"><div>義式蔬菜左巴薩米克醋</div><span class="price-tag">128</span></div></div>
+                <div class="list__item"><div class="list__body"><div>砥鎵鮪魚白醬</div><span class="price-tag">128</span></div></div>
+                <div class="list__item"><div class="list__body"><div>剝皮生牛肉</div><span class="price-tag">358</span></div></div>
+              </div>
+            </div>
+
+            <div class="menu-card side-menu-card">
+              <h4>綜合野菜盤</h4>
+              <div class="list">
+                <div class="list__item"><div class="list__body"><div>綜合野菜盤</div><span class="price-tag">188</span></div></div>
+              </div>
+            </div>
+
+            <div class="menu-card side-menu-card">
+              <h4>附餐</h4>
+              <div class="list">
+                <div class="list__item"><div class="list__body"><div>讚岐烏龍麵</div><span class="price-tag">28</span></div></div>
+                <div class="list__item"><div class="list__body"><div>台梗九號米</div><span class="price-tag">28</span></div></div>
+                <div class="list__item"><div class="list__body"><div>嚴選雞蛋</div><span class="price-tag">28</span></div></div>
+                <div class="list__item"><div class="list__body"><div>寬Q冬粉</div><span class="price-tag">28</span></div></div>
+              </div>
+            </div>
+            
+            <div class="menu-card side-menu-card">
+              <h4>甜點</h4>
+              <div class="list">
+                <div class="list__item"><div class="list__body"><div>手工焦糖布丁</div><span class="price-tag">128</span></div></div>
+                <div class="list__item"><div class="list__body"><div>火火費南雪 <small>(可選抹茶/伯爵茶/太妃糖)</small></div><span class="price-tag">128</span></div></div>
+                <div class="list__item"><div class="list__body"><div>砥鎵牛奶霜淇淋</div><span class="price-tag">128</span></div></div>
+                <div class="list__item"><div class="list__body"><div>松露霜淇淋</div><span class="price-tag">358</span></div></div>
+                <div class="list__item"><div class="list__body"><div>POP MART 霜淇淋</div><span class="price-tag">358</span></div></div>
+              </div>
+            </div>
+          </div>
+          <!-- 圖片畫廊 -->
+          <div class="image-gallery">
+            <figure>
+              <!-- 砥鎵小品單點的圖片檔位址已改成 dessert.jpg -->
+              <img src="dessert.jpg" alt="甜點與小品照片" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1C1C1C/DDDDDD?text=小品特寫示意圖'"/>
+            </figure>
+          </div>
+        </div>
+      </details>
+      
+
+    </div>
+  </section>
+
+  <!-- ========== 用餐須知 ========== -->
+  <section id="notice" class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">用餐須知</h2>
+        <p class="section__desc">為確保您有愉快的用餐體驗，請您留意以下事項。</p>
+      </div>
+
+      <details class="acd" data-key="notice" open>
+        <summary class="acd__head">
+          <span class="acd__title">重要事項公告</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="prose">
+            <ol>
+              <li>本店低消費用為每人一份套餐。</li>
+              <li>十二歲（含）以下均不收取低消費用。</li>
+              <li>用餐時間為訂位時間開始計算二小時；訂位保留十分鐘。</li>
+              <li>本店均不收取一成服務費用，如需打包請向服務人員索取外帶包裝自行打包即可。</li>
+              <li>本店包廂可容納八至十人，包廂低消為一萬元；如需使用包廂可向服務人員訂位及諮詢。</li>
+              <li>自帶酒水每瓶均酌收五百元開瓶費，提供杯子及冰塊。</li>
+              <li>禁止攜帶外食。</li>
+              <li>本場所為公共空間，請勿讓孩童隨意奔跑，以免危險。</li>
+              <li>攜帶寵物用餐，請用寵物袋或寵物推車並禁止寵物落地，以免造成其餘客人的困擾。</li>
+              <li>如有任何問題請洽詢服務人員；砌鍋鍋物謝謝您的光臨，希冀您有個愉快的用餐體驗。</li>
+            </ol>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+
+  <!-- ========== 訂位（導向 inline / 電話） ========== -->
+  <section id="reserve" class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">訂位</h2>
+        <p class="section__desc">線上訂位或電話預約</p>
+      </div>
+
+      <details class="acd" data-key="reserve" open>
+        <summary class="acd__head">
+          <span class="acd__title">立即訂位</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="menu-card">
+            <p>請使用以下方式預約：</p>
+            <div class="btn-row">
+              <a class="btn btn--primary" href="https://inline.app/booking/-OBiRumjzwAm5htR3ZKn:inline-live-3/-OBiRvCHanXMcq1k0pLD" target="_blank" rel="noopener">線上訂位（Inline） <i class="fas fa-calendar-alt" style="margin-left: 4px;"></i></a>
+              <a class="btn" href="tel:+886227214588">電話： (02) 2721-4588 <i class="fas fa-phone-alt" style="margin-left: 4px;"></i></a>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== 人才招募 ========== -->
+  <section id="career" class="section">
+    <div class="container">
+      <div class="section__head">
+        <h2 class="section__title">人才招募</h2>
+        <p class="section__desc">歡迎加入砥鎵，一起把一鍋做好</p>
+      </div>
+
+      <details class="acd" data-key="career" open>
+        <summary class="acd__head">
+          <span class="acd__title">投遞履歷</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="acd__body">
+          <div class="menu-card">
+            <p>請將履歷寄至 <a href="mailto:hr@dijia-hotpot.example">hr@dijia-hotpot.example</a>，或附上連結（PDF/作品集）。</p>
+            <p class="note">亦可於現場門市洽詢，或於社群私訊我們。</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ========== Footer ========== -->
+  <footer class="site-footer">
+    <div class="container footer__inner">
+      <div class="social" aria-label="社群連結">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      </div>
+      <div class="footline">
+        <div>地址：106 台北市大安區敦化南路一段 187 巷 59 號 1 樓｜電話：<a href="tel:+886227214588">(02) 2721-4588</a></div>
+        <small>© <span id="y"></span> 砥鎵火鍋</small>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ========== 輔助函數 ==========
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+    // ========== 行動版導覽列與錨點滾動邏輯 ==========
+    const nav = $('.nav');
+    const toggle = $('.nav-toggle');
+
+    // 切換行動版選單顯示
+    toggle?.addEventListener('click', () => {
+        nav.classList.toggle('show');
+        // 替換漢堡/X 圖標
+        const icon = toggle.querySelector('.fas');
+        if (icon) {
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        }
+    });
+
+    // 點選導覽：滾動到錨點 + 自動展開對應 details
+    $$('.nav a').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href');
+        if(id && id.startsWith('#')){
+          e.preventDefault();
+          const el = document.querySelector(id);
+          if(el){ el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+          // 自動開啟區塊
+          const details = el?.querySelectorAll('details.acd');
+          details?.forEach(d => d.open = true);
+          // 關掉行動選單
+          nav?.classList.remove('show');
+          const icon = toggle.querySelector('.fas');
+          if (icon) {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+          }
+          // 更新 active 樣式
+          setActiveLink(id);
+        }
+      });
+    });
+
+    // 隨著捲動更新 active 導覽項
+    const sections = ['#home','#about','#stores','#menu','#notice','#reserve','#career'].map(id => ({ id, el: $(id) }));
+    const setActiveLink = (hash) => {
+      $$('.nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === hash));
+    };
+    const onScroll = () => {
+      // 增加 100px 偏移量來確保 header 覆蓋範圍
+      const y = window.scrollY + 100; 
+      let current = '#home';
+      // 從下往上檢查，以確保最靠近頂部的區塊被選中
+      for(let i = sections.length - 1; i >= 0; i--){
+        const {id, el} = sections[i];
+        if(el && el.offsetTop <= y) {
+            current = id;
+            break;
+        }
+      }
+      setActiveLink(current);
+    };
+    document.addEventListener('scroll', onScroll);
+    window.addEventListener('load', onScroll);
+
+    // 直接輸入網址含 #hash 時，自動展開對應 details
+    const openHashDetails = () => {
+      const hash = window.location.hash;
+      if(!hash) return;
+      const el = document.querySelector(hash);
+      const details = el?.querySelectorAll('details.acd');
+      details?.forEach(d => d.open = true);
+      // 確保滾動在細節展開後進行
+      setTimeout(() => {
+        el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50); // 延遲 50ms 確保 details 展開完成
+      setActiveLink(hash);
+    };
+    window.addEventListener('hashchange', openHashDetails);
+    window.addEventListener('load', openHashDetails);
+
+    // ========== 展開/收合全部功能 ==========
+    const tool = $('.toolbar');
+    tool?.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-action]');
+      if(!t) return;
+      const action = t.getAttribute('data-action');
+      // 只針對 #menu 區塊內的 details.acd 進行操作
+      const menuSection = $('#menu');
+      if (!menuSection) return;
+
+      // 排除「關於砥鎵」、「店舖資訊」、「用餐須知」等非菜單細節
+      const allMenuDetails = $$('details.acd', menuSection);
+
+      const open = action === 'expand-all';
+      allMenuDetails.forEach(d => d.open = open);
+    });
+
+    // 版權年份
+    $('#y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
