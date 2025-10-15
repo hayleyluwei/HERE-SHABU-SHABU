@@ -85,7 +85,8 @@
         /* 背景圖設定：注意圖片路徑需要存在 */
         background-image: url('back01test.png'); 
         background-size: cover; 
-        background-position: center top; 
+        /* 【已修改】確保圖片在手機上也能置中顯示 */
+        background-position: center center; 
         background-attachment: fixed; 
         padding-top: 64px; 
     }
@@ -871,7 +872,7 @@
       <!-- 砥鎵小品單點：餐點名稱 / 價位 (使用雙欄卡片優化手機顯示) -->
       <details class="acd" data-key="menu-side-dishes" open>
         <summary class="acd__head">
-          <span class="acd__title">砥鎵小品單點</span>
+          <span class="acd__title">砥鎵小品單點 (非主食/海鮮)</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </summary>
         <div class="acd__body">
@@ -1148,13 +1149,13 @@
             facebook: {
                 // FB 網頁連結
                 web: 'https://www.facebook.com/heredijia?locale=zh_TW', 
-                // FB App link (使用網頁連結，手機會自動引導)
-                app: 'fb://page/heredijia' // 使用 fb:// 嘗試開啟 App，若失敗會退回網頁版
+                // FB App link 
+                app: 'fb://page/heredijia'
             },
             instagram: {
-                // IG 網頁連結 (從網址取出 here_dijia 作為用戶名)
+                // IG 網頁連結 
                 web: 'https://www.instagram.com/here_dijia/', 
-                // IG App deep link (使用 IG 使用者名稱)
+                // IG App deep link 
                 app: 'instagram://user?username=here_dijia'
             }
         };
